@@ -1,0 +1,67 @@
+<div class="flex justify-center items-center overflow-y-auto h-[calc(100vh-110px)]">
+  <div class="bg-white w-80 rounded-lg shadow-lg p-10">
+    <p class="uppercase font-bold opacity-70">Registrar Usuario</p>
+    <form (ngSubmit)="GuardarUsuario()">
+      <div class="mt-5 flex flex-col space-y-2">
+        <!-- Campo de usuario -->
+        <input
+          class="py-2 px-3 border w-full rounded-lg"
+          type="text"
+          placeholder="Usuario"
+          [(ngModel)]="usuario.nombreUsuario"
+          name="usuario"
+          required
+        />
+
+        <!-- Campo de contraseña -->
+        <input
+          class="py-2 px-3 border w-full rounded-lg"
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="usuario.contrasena"
+          name="contraseña"
+          required
+        />
+
+        <!-- Campo de correo electrónico -->
+        <input
+          class="py-2 px-3 border w-full rounded-lg"
+          type="email"
+          placeholder="Correo electrónico"
+          [(ngModel)]="usuario.correo"
+          name="correo"
+          required
+        />
+
+        <!-- Campo de teléfono -->
+        <input
+          class="py-2 px-3 border w-full rounded-lg"
+          type="tel"
+          placeholder="Teléfono"
+          [(ngModel)]="usuario.telefono"
+          name="telefono"
+          required
+        />
+
+        <!-- Campo de dirección -->
+        <input
+          class="py-2 px-3 border w-full rounded-lg"
+          type="text"
+          placeholder="Dirección"
+          [(ngModel)]="usuario.direccion"
+          name="direccion"
+          required
+        />
+      </div>
+
+      <!-- Botón para enviar el formulario -->
+      <button
+        type="submit"
+        class="py-1 w-full bg-red-500 mt-5 font-bold text-white rounded-lg hover:bg-red-600"
+      >
+        Registrar
+      </button>
+    </form>
+  </div>
+</div>
+

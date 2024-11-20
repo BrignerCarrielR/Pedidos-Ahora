@@ -1,0 +1,46 @@
+<div class="flex justify-between items-center space-x-2 font-bold  m-1">
+  <p class="uppercase text-xl opacity-70">Carrito de compras</p>
+  <a href="/pedidos" class="bg-blue-600 text-white py-2 px-4 rounded-lg">Pedidos realizados</a>
+</div>
+
+<div class="m-1">
+  <div class="flex flex-col">
+    <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+        <div class="overflow-hidden">
+          <table class="min-w-full text-center text-sm  text-surface">
+            <thead class="border-b border-neutral-200 bg-gray-100">
+            <tr>
+              <th scope="col" class=" px-6 py-4">Menu Comida</th>
+              <th scope="col" class=" px-6 py-4">Precio</th>
+              <th scope="col" class=" px-6 py-4">Cantidad</th>
+              <th scope="col" class=" px-6 py-4">Total</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngIf="listaCarrito.length === 0; else carritoConDatos" class="bg-white border-b border-2">
+              <td colspan="4" class="px-6 py-4 text-xl opacity-70 font-medium">El carrito se encuentra vacío</td>
+            </tr>
+            <ng-template #carritoConDatos>
+              <tr *ngFor="let carrito of listaCarrito" class="bg-white border-b border-2">
+                <td class="whitespace-nowrap px-6 py-4">{{ carrito.nombre_plato }}</td>
+                <td class="whitespace-nowrap px-6 py-4">{{ carrito.precio }}</td>
+                <td class="whitespace-nowrap px-6 py-4">{{ carrito.cantidad }}</td>
+                <td class="whitespace-nowrap px-6 py-4">{{ carrito.total }}</td>
+              </tr>
+            </ng-template>
+            </tbody>
+
+          </table>
+          <div class="flex items-center justify-between mt-4">
+            <p class=" text-xl font-bold opacity-70  uppercase">Total del pedidos: <span>{{ totalCarrito }}</span></p>
+            <button (click)="postRealizarPedido()"
+                    class="bg-red-400 py-2 px-4 font-bold text-white rounded-lg hover:bg-red-600">
+              Realizar pedido
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
