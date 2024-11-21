@@ -88,7 +88,7 @@ CREATE TABLE favoritos (
 );
 
 
-
+-- PROCEDIMIENTOS ALAMACENADOS
 CREATE OR REPLACE PROCEDURE agregar_al_carrito(p_id_usuario INT, p_id_menu_comida INT, p_cantidad INT)
 LANGUAGE plpgsql
 AS $$
