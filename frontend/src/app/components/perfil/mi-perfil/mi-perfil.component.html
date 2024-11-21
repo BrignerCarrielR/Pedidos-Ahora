@@ -1,0 +1,59 @@
+<div class="p-2 sm:px-32">
+  <div class="lg:flex space-x-3 mt-8">
+    <div class="w-96">
+      <div class=" opacity-70">
+        <p class="text-xl font-semibold">Hola, {{ nombreUsuario }} </p>
+        <p>Te damos la bienvenida a tu cuenta</p>
+      </div>
+      <div class="flex flex-col space-y-3 mt-8">
+        <a id="informacion_actual" class="flex space-x-1" [ngClass]="{'text-red-600 font-semibold': isActive('/informacion_cuenta')}" href="/informacion_cuenta">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+          </svg>
+          <p>Información de la cuenta</p>
+        </a>
+
+        <a id="mis_pedidos" class="flex space-x-1" [ngClass]="{'text-red-600 font-semibold': isActive('/mis_pedidos')}" href="/mis_pedidos">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z"/>
+          </svg>
+          <p>Mis pedidos</p>
+        </a>
+
+        <a id="cancelados" class="flex space-x-1" [ngClass]="{'text-red-600 font-semibold': isActive('/cancelados')}" href="/cancelados">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m7.49 12-3.75 3.75m0 0 3.75 3.75m-3.75-3.75h16.5V4.499"/>
+          </svg>
+          <p>Cancelaciones</p>
+        </a>
+
+      </div>
+    </div>
+    <div class="w-full">
+      <ng-content>
+        <div class="space-y-4">
+          <!--contenido-->
+          <p class="opacity-70 text-xl font-semibold">Mi cuenta</p>
+          <p class="opacity-70">Información de la cuenta</p>
+          <div class="opacity-70">
+            <p class="font-semibold">Datos personales</p>
+            <p>{{ nombreUsuario }}</p>
+            <p>brignerarielcgmail.com</p>
+          </div>
+          <div>
+            <a href="/informacion_cuenta"
+               class="border border-red-600 rounded py-2 px-6 text-red-600 font-semibold hover:bg-red-600 hover:text-white ">
+              Editar</a>
+          </div>
+        </div>
+      </ng-content>
+    </div>
+  </div>
+</div>
+

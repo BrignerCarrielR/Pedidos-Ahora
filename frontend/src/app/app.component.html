@@ -5,28 +5,45 @@
 
     <!-- Si el usuario está logueado -->
     <div *ngIf="login; else logout" class="flex items-center space-x-4">
-      <p>{{ nombreUsuario }}</p>
+      <p>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" />
+        </svg>
+      </p>
 
-      <!-- Icono de carrito -->
-      <a href="/carrito" class="relative">
-        <button class="border py-1 px-3 rounded-lg hover:bg-white hover:text-red-600">
 
-          <!-- Contador de productos en el carrito (si aplica) -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-            <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" />
+      <!-- Dropdown Menu -->
+      <div class="relative">
+        <button (click)="toggleDropdown()" class="flex items-center py-1 px-3 rounded-lg hover:bg-white hover:text-red-600">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+          </svg>
+          <p class="flex items-center">{{ nombreUsuario }}</p>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 inline-block ml-2">
+            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd"/>
           </svg>
         </button>
-      </a>
 
-      <!-- Botón de Cerrar sesión -->
-      <button (click)="CerrarSesion()" class="py-1 px-3 rounded-lg hover:bg-white hover:text-red-600" title="Cerrar sesión">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-          <path fill-rule="evenodd"
-                d="M16.5 3.75a1.5 1.5 0 0 1 1.5 1.5v13.5a1.5 1.5 0 0 1-1.5 1.5h-6a1.5 1.5 0 0 1-1.5-1.5V15a.75.75 0 0 0-1.5 0v3.75a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3V5.25a3 3 0 0 0-3-3h-6a3 3 0 0 0-3 3V9A.75.75 0 1 0 9 9V5.25a1.5 1.5 0 0 1 1.5-1.5h6Zm-5.03 4.72a.75.75 0 0 0 0 1.06l1.72 1.72H2.25a.75.75 0 0 0 0 1.5h10.94l-1.72 1.72a.75.75 0 1 0 1.06 1.06l3-3a.75.75 0 0 0 0-1.06l-3-3a.75.75 0 0 0-1.06 0Z"
-                clip-rule="evenodd"/>
+        <!-- Dropdown menu -->
+        <div *ngIf="isDropdownOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg z-10">
+          <ul class="py-2 text-gray-700">
+            <li>
+              <button (click)="goToProfile()" class="block px-4 py-2 w-full text-start text-sm hover:bg-gray-200">Mi Perfil</button>
+            </li>
+            <li>
+              <button (click)="CerrarSesion()" class="block px-4 py-2 w-full text-start text-sm hover:bg-gray-200 ">Cerrar Sesión</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <a href="/carrito" class="rounded-b-lg hover:border-b-2 px-2">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+          <path d="M2.25 2.25a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 0 0-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 0 0 0-1.5H5.378A2.25 2.25 0 0 1 7.5 15h11.218a.75.75 0 0 0 .674-.421 60.358 60.358 0 0 0 2.96-7.228.75.75 0 0 0-.525-.965A60.864 60.864 0 0 0 5.68 4.509l-.232-.867A1.875 1.875 0 0 0 3.636 2.25H2.25ZM3.75 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM16.5 20.25a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z" />
         </svg>
-      </button>
+      </a>
     </div>
+
+
 
     <!-- Si el usuario no está logueado -->
     <ng-template #logout>
@@ -38,7 +55,7 @@
   </div>
 
   <!-- Contenido principal -->
-  <div class="flex-grow bg-gray-200 p-5 overflow-y-auto h-[calc(100vh-64px)]">
+  <div class="flex-grow bg-gray-100 overflow-y-auto h-[calc(100vh-64px)]">
     <router-outlet></router-outlet>
   </div>
 </div>

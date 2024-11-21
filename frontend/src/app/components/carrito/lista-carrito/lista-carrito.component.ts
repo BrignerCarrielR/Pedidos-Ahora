@@ -15,6 +15,9 @@ import {ApiService} from '../../../api.service';
 export class ListaCarritoComponent implements OnInit {
   listaCarrito: any[] = [];
   totalCarrito: number = 0;
+  cantidadPedidos: number = 0;
+  tarifa: number = 0
+  subtotal: number = 0;
 
   constructor(private authService: AuthService, private apiService: ApiService) {
   }
@@ -32,11 +35,21 @@ export class ListaCarritoComponent implements OnInit {
         console.log(this.listaCarrito);
 
         // calcular el total del carrito después de que los datos se hayan cargado
-        this.totalCarrito = this.listaCarrito.reduce((acumulador, item) => {
-          return acumulador + parseFloat(item.total); // nos aseguramos de que item.total sea un número
+        this.totalCarrito = parseFloat(
+          this.listaCarrito.reduce((acumulador, item) => {
+            return acumulador + parseFloat(item.total); // aseguramos que item.total sea un número
+          }, 0).toFixed(2)
+        );
+        this.cantidadPedidos = this.listaCarrito.reduce((acumulador, item) => {
+          return acumulador + parseInt(item.cantidad); // nos aseguramos de que item.total sea un número
         }, 0);
 
+        this.tarifa = parseFloat((this.totalCarrito * 0.1).toFixed(2));
+        this.subtotal = parseFloat((this.totalCarrito + this.tarifa).toFixed(2));
         console.log('Total del carrito:', this.totalCarrito);
+        console.log('Cantidad de elementos en el  carrito:', this.cantidadPedidos);
+        console.log('Tarifa:', this.tarifa);
+
       },
       error => {
         console.error(error);
