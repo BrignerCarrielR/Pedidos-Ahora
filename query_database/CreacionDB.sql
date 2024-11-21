@@ -6,9 +6,15 @@ CREATE TABLE usuarios (
     contrasena VARCHAR(255) NOT NULL, 
     telefono VARCHAR(20),
     direccion TEXT,
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    es_staff BOOLEAN DEFAULT FALSE
 );
 
+-- Tabla de tipos de comidas
+CREATE TABLE tipos_comida (
+    id SERIAL PRIMARY KEY, 
+    tipo_nombre VARCHAR(100) NOT NULL UNIQUE
+);
 -- Tabla de menú de comidas
 CREATE TABLE menu_comidas (
     id SERIAL PRIMARY KEY, 
@@ -16,7 +22,18 @@ CREATE TABLE menu_comidas (
     descripcion TEXT,
     precio DECIMAL(10, 2) NOT NULL, 
     disponible BOOLEAN DEFAULT TRUE, 
-    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    tipo_comida_id INT,
+    imagen TEXT,  -- Columna para almacenar la imagen en base64
+    CONSTRAINT fk_tipo_comida FOREIGN KEY (tipo_comida_id) REFERENCES tipos_comida(id)
+);
+
+-- Tabla de temporada
+CREATE TABLE temporada (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    tarifa DECIMAL(10, 2) NOT NULL,
+    estado BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Tabla de pedidos
@@ -25,8 +42,11 @@ CREATE TABLE pedidos (
     id_usuario INT REFERENCES usuarios(id) ON DELETE CASCADE, 
     fecha_pedido TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
     estado VARCHAR(50) DEFAULT 'Pendiente', 
-    total DECIMAL(10, 2) NOT NULL 
+    total DECIMAL(10, 2) NOT NULL,
+    comentario TEXT DEFAULT 'Sin comentario',
+    id_temporada INT REFERENCES temporada(id) ON DELETE SET NULL
 );
+
 
 -- Tabla detalle_pedido
 CREATE TABLE detalle_pedido (
@@ -34,10 +54,11 @@ CREATE TABLE detalle_pedido (
     id_pedido INT REFERENCES pedidos(id) ON DELETE CASCADE, 
     id_menu_comida INT REFERENCES menu_comidas(id) ON DELETE CASCADE,  
     cantidad INT NOT NULL,  
-    precio DECIMAL(10, 2) NOT NULL, posteriormente)
+    precio DECIMAL(10, 2) NOT NULL, 
     total DECIMAL(10, 2) NOT NULL 
 );
 
+-- Tabla carrito
 CREATE TABLE carrito (
     id SERIAL PRIMARY KEY, 
     id_usuario INT REFERENCES usuarios(id) ON DELETE CASCADE, 
@@ -45,7 +66,7 @@ CREATE TABLE carrito (
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
+-- Tabla detalle_carrito
 CREATE TABLE detalle_carrito (
     id SERIAL PRIMARY KEY, 
     id_carrito INT REFERENCES carrito(id) ON DELETE CASCADE,  -- Relacionado con el carrito
@@ -55,62 +76,16 @@ CREATE TABLE detalle_carrito (
     total DECIMAL(10, 2) NOT NULL  -- Total de la línea (cantidad * precio)
 );
 
-
-INSERT INTO usuarios (nombre, correo, contrasena, telefono, direccion) 
-VALUES 
-('Yomaira Suarez', 'ysuarezr@unemi.edu.ec', 'yomasuarez', '0987654326', 'Vinces - Palizada'),
-('Carlos Martínez', 'carlos.martinez@example.com', 'carlitos123', '0998765432', 'Quito - La Mariscal'),
-('Laura Gómez', 'laura.gomez@example.com', 'laura2023', '0987112233', 'Guayaquil - Urdesa'),
-('Pedro López', 'pedro.lopez@example.com', 'pedro1234', '0967445566', 'Cuenca - Centro');
-
-
-INSERT INTO menu_comidas (nombre_plato, descripcion, precio, disponible)
-VALUES
-('Pollo al Horno', 'Pollo asado con papas y ensalada', 8.99, TRUE),
-('Pizza Margherita', 'Pizza con tomate, queso y albahaca', 12.50, TRUE),
-('Ensalada Caesar', 'Ensalada fresca con pollo, lechuga, croutons y aderezo César', 7.30, TRUE),
-('Sopa de Mariscos', 'Sopa caliente con mariscos frescos', 10.00, FALSE),
-('Hamburguesa Clásica', 'Hamburguesa con carne, queso, lechuga y tomate', 6.50, TRUE);
-
-
--- Nota: Asegúrate de que los usuarios que estás utilizando existen (por ejemplo, id_usuario = 1, 2, etc.)
-INSERT INTO pedidos (id_usuario, total, estado) 
-VALUES
-(1, 26.79, 'Pendiente'),
-(2, 19.80, 'Enviado'),
-(3, 13.50, 'Entregado'),
-(4, 22.40, 'Pendiente');
-
--- Nota: Asegúrate de que los pedidos a los que te refieres existen (por ejemplo, id_pedido = 1, 2, etc.)
-INSERT INTO historial_pedidos (id_pedido, estado, comentario) 
-VALUES
-(1, 'En Preparación', 'El pedido está siendo preparado.'),
-(2, 'Entregado', 'El pedido fue entregado correctamente.'),
-(3, 'En Preparación', 'Estamos preparando la comida, pronto se enviará.'),
-(4, 'Enviado', 'El pedido ha sido enviado y está en camino.');
-
-INSERT INTO detalle_pedido (id_pedido, id_menu_comida, cantidad, precio, total)
-VALUES
-(1, 2, 1, 12.50, 12.50),  -- Pizza Margherita
-(1, 1, 1, 8.99, 8.99),   -- Pollo al Horno
-(1, 5, 1, 6.50, 6.50);   -- Hamburguesa Clásica
-
-INSERT INTO detalle_pedido (id_pedido, id_menu_comida, cantidad, precio, total)
-VALUES
-(2, 2, 1, 12.50, 12.50),  -- Pizza Margherita
-(2, 4, 1, 10.00, 10.00),  -- Sopa de Mariscos (disponible = FALSE, pero la incluimos)
-(2, 3, 1, 7.30, 7.30);    -- Ensalada Caesar
-
-INSERT INTO detalle_pedido (id_pedido, id_menu_comida, cantidad, precio, total)
-VALUES
-(3, 1, 1, 8.99, 8.99),  -- Pollo al Horno
-(3, 3, 1, 7.30, 7.30);  -- Ensalada Caesar
-
-INSERT INTO detalle_pedido (id_pedido, id_menu_comida, cantidad, precio, total)
-VALUES
-(4, 5, 2, 6.50, 13.00),  -- 2 Hamburguesas Clásicas
-(4, 1, 1, 8.99, 8.99);   -- Pollo al Horno
-
+-- Tabla detalle_carrito
+CREATE TABLE favoritos (
+    id SERIAL PRIMARY KEY,
+    id_usuario INT REFERENCES usuarios(id) ON DELETE CASCADE, 
+    id_plato INT REFERENCES menu_comidas(id) ON DELETE CASCADE,
+    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_usuario FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
+    CONSTRAINT fk_plato FOREIGN KEY (id_plato) REFERENCES menu_comidas(id) ON DELETE CASCADE,
+    CONSTRAINT unique_favorito UNIQUE (id_usuario, id_plato) -- Asegura que un usuario no pueda agregar el mismo plato dos veces.
+);
 
 
 
@@ -156,6 +131,7 @@ DECLARE
     v_id_carrito INT;
     v_total DECIMAL(10, 2) := 0;
     v_id_pedido INT;
+    v_id_temporada INT;
     detalle RECORD;
 BEGIN
     -- obtenemos el carrito activo del usuario
@@ -172,6 +148,17 @@ BEGIN
     INSERT INTO pedidos(id_usuario, total) 
     VALUES (p_id_usuario, 0) RETURNING id INTO v_id_pedido;
 
+    -- obtenemos el id de la temporada activa (si hay varias, tomamos una)
+    SELECT id INTO v_id_temporada
+    FROM temporada
+    WHERE estado = TRUE
+    LIMIT 1;
+
+    -- si no hay temporada activa, asignar NULL al pedido
+    IF NOT FOUND THEN
+        v_id_temporada := NULL;
+    END IF;
+
     -- copiamos los detalles del carrito a los detalles del pedido
     FOR detalle IN
         SELECT id_menu_comida, cantidad, precio, total
@@ -186,10 +173,27 @@ BEGIN
         v_total := v_total + detalle.total;
     END LOOP;
 
-    -- actualizamos el total del pedido
-    UPDATE pedidos SET total = v_total WHERE id = v_id_pedido;
+    -- si hay una temporada activa, aplicar su tarifa al total
+    IF v_id_temporada IS NOT NULL THEN
+        -- obtenemos la tarifa de la temporada activa
+        DECLARE
+            v_tarifa DECIMAL(10, 2);
+        BEGIN
+            SELECT tarifa INTO v_tarifa
+            FROM temporada
+            WHERE id = v_id_temporada;
+            
+            -- aplicar la tarifa al total
+            v_total := v_total + v_tarifa;
+        END;
+    END IF;
 
-    -- caambiamoss el estado del carrito a 'Confirmado'
+    -- actualizamos el total del pedido con la tarifa aplicada
+    UPDATE pedidos 
+    SET total = v_total, id_temporada = v_id_temporada
+    WHERE id = v_id_pedido;
+
+    -- cambiamos el estado del carrito a 'Confirmado'
     UPDATE carrito SET estado = 'Confirmado' WHERE id = v_id_carrito;
 
     -- eliminamos los detalles del carrito

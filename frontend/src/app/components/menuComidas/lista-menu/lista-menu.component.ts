@@ -5,7 +5,6 @@ import { ApiService } from '../../../api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-
 @Component({
   selector: 'app-lista-menu',
   standalone: true,
@@ -16,7 +15,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class ListaMenuComponent implements OnInit {
   menuItems: any[] = [];
+  MenuItemsFiltrado: any[] = [];
   login: boolean = false;
+  buscarComida: string = '';
+  categories: string[] = [
+    'Todas',
+    'Comidas tipicas del País',
+    'Comidas Internacionales',
+    'Comidas Vegetarianas y Veganas',
+    'Comidas de Desayuno',
+    'Comidas Dulces',
+    'Comidas Saludables',
+  ];
 
   constructor(private authService: AuthService, private apiService: ApiService) {}
 
@@ -28,11 +38,24 @@ export class ListaMenuComponent implements OnInit {
     this.getMenuItems();
   }
 
+  // evento pra filtrar los elmentos segun lo ingreado
+  onInputChange() {
+    this.MenuItemsFiltrado = this.menuItems.filter(menu =>
+      menu.nombre_plato.toLowerCase().includes(this.buscarComida.toLowerCase())
+    );
+    console.log('Menú filtrado:', this.MenuItemsFiltrado);
+  }
+
+  selectedCategory: string = this.categories[0];
+  selectedOrder: string = 'A-Z';
+
+  // obtenemos los elementos del menú de la API
   getMenuItems() {
     this.apiService.get<any[]>('menu_comida')
       .subscribe(
         data => {
           this.menuItems = data;
+          this.MenuItemsFiltrado = data; // definimos la lista filtrada al iniciar con todos los elementos
         },
         error => {
           console.error(error);
@@ -48,14 +71,14 @@ export class ListaMenuComponent implements OnInit {
 
     const pedido = {
       id_usuario: this.authService.id,
-      id_comida: menu.id,  // ID del menú actual
+      id_comida: menu.id,
       cantidad: menu.cantidad
     };
 
     this.apiService.post('agregar_pedido_carrito', pedido).subscribe(
       data => {
         console.log('Pedido agregado al carrito:', data);
-        alert('Pedido agregado al carrito')
+        alert('Pedido agregado al carrito');
       }, error => {
         console.error('Error al agregar al carrito:', error);
       }

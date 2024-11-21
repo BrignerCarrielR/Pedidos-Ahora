@@ -3,15 +3,19 @@ import { CommonModule} from '@angular/common';
 import {ApiService} from '../../../api.service';
 import {AuthService} from '../../../auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { InicioComponent} from '../inicio/inicio.component';
+
 @Component({
   selector: 'app-pedidos',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, InicioComponent],
   providers: [ApiService],
   templateUrl: './pedidos.component.html',
   styleUrl: './pedidos.component.css'
 })
 export class PedidosComponent implements OnInit {
+  titulo: string = 'Gestionar pedidos';
+  subtitulo: string = 'Visualiza los pedidos resalizados - Envía o Cancela'
   listaPedidos: any[] = [];
 
   constructor(private authService: AuthService, private apiService: ApiService) {

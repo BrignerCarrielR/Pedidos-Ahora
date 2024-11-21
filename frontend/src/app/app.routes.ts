@@ -9,6 +9,10 @@ import {MiPerfilComponent} from './components/perfil/mi-perfil/mi-perfil.compone
 import {InformacionCuentaComponent} from './components/perfil/informacion-cuenta/informacion-cuenta.component';
 import {MisPedidosComponent} from './components/perfil/mis-pedidos/mis-pedidos.component';
 import {CanceladosComponent} from './components/perfil/cancelados/cancelados.component';
+import {InicioComponent} from './components/administracion/inicio/inicio.component';
+import {AnadirMenuComponent} from './components/administracion/anadir-menu/anadir-menu.component';
+import {ListaMenusComponent} from './components/administracion/lista-menus/lista-menus.component';
+import {FavoritosComponent} from './components/perfil/favoritos/favoritos.component';
 
 export const routes: Routes = [
   {path: '', component: ListaMenuComponent},
@@ -20,6 +24,11 @@ export const routes: Routes = [
   {path: 'informacion_cuenta', component: InformacionCuentaComponent},
   {path: 'mis_pedidos', component: MisPedidosComponent},
   {path: 'cancelados', component: CanceladosComponent},
+  {path: 'favoritos', component: FavoritosComponent},
 
+  // urls para el administrador
+  {path: 'administrador/inicio', component: InicioComponent},
+  {path: 'administrador/lista_menus', component: ListaMenusComponent},
+  {path: 'administrador/anadir_menu', component: AnadirMenuComponent},
   {path: 'administrador/pedidos', component: PedidosComponent},
 ];

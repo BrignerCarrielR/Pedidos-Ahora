@@ -33,7 +33,7 @@ export class LoginComponent {
           this.authService.loginUser(response.token, response.id, response.nombreUsuario);
           console.log('Login exitoso');
           if (response.nombreUsuario === 'bcarrielr') {
-            window.location.href = '/administrador/pedidos'
+            window.location.href = '/administrador/inicio'
           } else {
             window.location.href = '/'
           }
