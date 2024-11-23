@@ -23,4 +23,28 @@ export class MenuComidaController {
             });
         }
     }
+
+    // creamos un nuevo plato
+    static async postMenuComida(req, res) {
+        try{
+            const data = await MenuComidaModel.postMenuComida(req.body);
+            res.status(200).send(data);
+        } catch (error) {
+            res.status(500).send({
+                message: error.message || "Error al obtener el menu"
+            });
+        }
+    }
+
+    // modificamos un plato
+    static async putMenuComida(req, res) {
+        try{
+            const data = await MenuComidaModel.putMenuComida(req.params.id, req.body);
+            res.status(200).send(data);
+        } catch (error) {
+            res.status(500).send({
+                message: error.message || "Error al obtener el menu"
+            });
+        }
+    }
 }

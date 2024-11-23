@@ -5,5 +5,7 @@ const menuComidaRouter = express.Router();
 
 menuComidaRouter.get('/menu_comida', MenuComidaController.getMenuComida);
 menuComidaRouter.get('/menu_comida/:id', MenuComidaController.getMenuComidaId);
+menuComidaRouter.post('/menu_comida', MenuComidaController.postMenuComida);
+menuComidaRouter.put('/menu_comida/:id', MenuComidaController.putMenuComida);
 
 export default menuComidaRouter;

@@ -1,14 +1,13 @@
 import pool from "../database/db.js";
 import bcrypt from "bcrypt";
+import {queries} from "../database/queries.js";
 
 export class UsuarioModel {
     // metodo para consultar a los usuarios
     static async getUsuarios() {
         const db = await pool.connect()
         try {
-            const query = `SELECT * FROM usuarios`;
-
-            const result = await db.query(query);
+            const result = await db.query(queries.consultarUsuario);
             return result.rows;
         } catch (error) {
             throw error;
@@ -21,10 +20,7 @@ export class UsuarioModel {
     static async getUsuario(id) {
         const db = await pool.connect()
         try {
-            const query = `SELECT * FROM usuarios WHERE id = $1`;
-            const values = [id];
-
-            const result = await db.query(query,values);
+            const result = await db.query(queries.consultarUsuario,[id]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -46,13 +42,8 @@ export class UsuarioModel {
             // encriptamos la contraseña
             const hashedContrasena = await bcrypt.hashSync(contrasena, 10);
 
-            const query = `
-            INSERT INTO usuarios (nombreUsuario, correo, contrasena, telefono, direccion)
-            VALUES($1, $2, $3, $4, $5) RETURNING *; 
-            `;
             const values = [nombreUsuario, correo, hashedContrasena, telefono, direccion];
-
-            const result = await db.query(query, values);
+            const result = await db.query(queries.crearUsuario, values);
             return result.rows;
         }
         catch(error){
@@ -61,6 +52,4 @@ export class UsuarioModel {
             db.release();
         }
     }
-
-
 }

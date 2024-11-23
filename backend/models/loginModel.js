@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import {queries} from "../database/queries.js";
 
 
 // cargamos las variables de entorno
@@ -14,16 +15,13 @@ export class LoginModel {
         const db = await pool.connect();
         try {
             const {nombreUsuario, contrasena} = usuario;
-            const usuarioDB = await db.query(
-                `SELECT id, nombreUsuario, contrasena FROM usuarios WHERE nombreUsuario = $1`,
-                [nombreUsuario]
-            );
+            const usuarioDB = await db.query(queries.consultarInfoUsuario, [nombreUsuario]);
 
             if (usuarioDB.rows.length === 0) {
                 throw new Error("El nombre de usuario no es válido");
             }
 
-            const {contrasena: contrasenaDB, id} = usuarioDB.rows[0];
+            const {contrasena: contrasenaDB, id, es_staff} = usuarioDB.rows[0];
             const contrasenaCorrecta = await bcrypt.compare(contrasena, contrasenaDB);
 
             if (contrasenaCorrecta) {
@@ -42,13 +40,8 @@ export class LoginModel {
 
                 console.log('Refresh token generado:', refreshToken); // Verificación
 
-                // Guardar refresh token en DB
-                await db.query(
-                    `UPDATE usuarios SET refresh_token = $1 WHERE id = $2`,
-                    [refreshToken, id]
-                );
-
-                return {accessToken, refreshToken, id, nombreUsuario};
+                // Enviar tokens sin guardar el refresh token en la base de datos
+                return {accessToken, refreshToken, id, nombreUsuario, es_staff};
             } else {
                 throw new Error("La contraseña no coincide con el usuario.");
             }
@@ -63,7 +56,7 @@ export class LoginModel {
 
     // refreshToken
     static async refreshToken(token) {
-        const { refreshToken } = token;  // Extraemos el refreshToken del cuerpo de la solicitud
+        const {refreshToken} = token;  // Extraemos el refreshToken del cuerpo de la solicitud
         console.log('Refresh Token recibido:', refreshToken);  // Verifica que sea una cadena
 
         // Verificar si el refreshToken es una cadena de texto
@@ -93,30 +86,19 @@ export class LoginModel {
 
             // Generar un nuevo access token
             const accessToken = jwt.sign(
-                { id: decoded.id, nombreUsuario: decoded.nombreUsuario },
+                {id: decoded.id, nombreUsuario: decoded.nombreUsuario},
                 process.env.JWT_SECRET,
-                { expiresIn: process.env.JWT_EXPIRACION }
+                {expiresIn: process.env.JWT_EXPIRACION}
             );
 
             // Retornar el nuevo access token
-            return { accessToken };
+            return {accessToken};
 
         } catch (error) {
             console.error("Error al refrescar el token:", error.message);
             throw new Error(error.message);  // Lanza el error para que el controlador lo maneje
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

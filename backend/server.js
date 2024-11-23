@@ -5,6 +5,7 @@ import menuComidaRoute from "./routes/menuComidaRoute.js";
 import pedidosRouter from "./routes/pedidoRoute.js";
 import carritoRouter from "./routes/carritoRoute.js";
 import loginRouter from "./routes/loginRoute.js";
+import temporadaRoutes from "./routes/temporadaRoute.js";
 
 const app = express();
 app.use(cors({
@@ -20,6 +21,7 @@ app.use(menuComidaRoute)
 app.use(pedidosRouter)
 app.use(carritoRouter)
 app.use(loginRouter)
+app.use(temporadaRoutes)
 
 
 app.get('/', (req, res) => {

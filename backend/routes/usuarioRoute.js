@@ -15,3 +15,11 @@ usuarioRoute.get('/perfil', autenticacionToken, (req, res) => {
 });
 
 export default usuarioRoute;
+
+// {
+//     "nombreUsuario": "bcarrielr",
+//     "correo": "brignerarielc@email.com",
+//     "contrasena": "brignercr10",
+//     "telefono": "0962165367",
+//     "direccion": "Vinces - Palizada"
+// }

@@ -1,5 +1,6 @@
 import pool from "../database/db.js";
 import {query} from "express";
+import {queries} from "../database/queries.js";
 
 export class PedidoModel {
     // metodo para consultar los pedidos. funciona con el historial en el front validamos que solo se muestren
@@ -7,9 +8,7 @@ export class PedidoModel {
     static async getPedidos() {
         const db = await pool.connect()
         try {
-            const query = `select p.id, u.nombreusuario, fecha_pedido, p.estado, p.total from pedidos p, usuarios u where u.id = p.id_usuario order by estado desc `
-
-            const result = await db.query(query)
+            const result = await db.query(queries.consultarPedidos);
             return result.rows;
         } catch (error) {
             throw error;
@@ -22,10 +21,7 @@ export class PedidoModel {
     static async getPedido(id) {
         const db = await pool.connect()
         try {
-            const query = `select * from pedidos p   where id_usuario = $1 order by estado desc`
-            const values = [id]
-
-            const result = await db.query(query, values)
+            const result = await db.query(queries.consultarPedido, [id])
             return result.rows;
         } catch (error) {
             throw error;
@@ -38,11 +34,7 @@ export class PedidoModel {
     static async getDetallePedido(id) {
         const db = await pool.connect(); // Obtiene una conexión del pool
         try {
-            const query = `SELECT * FROM detalle_pedido WHERE id_pedido = $1`; // Consulta SQL
-            const values = [id]; // Parámetros para la consulta (id del pedido)
-            // Ejecutar la consulta
-            const result = await db.query(query, values);
-            // Devolver los resultados al callback
+            const result = await db.query(queries.consultarDetallesPedido, [id]);
             return result.rows;
         } catch (error) {
             throw error;
@@ -58,11 +50,7 @@ export class PedidoModel {
         const db = await pool.connect(); // Conexión del pool
 
         try {
-            const query = `CALL confirmar_pedido($1)`;
-            const values = [id];
-            const result = await db.query(query, values);
-            // Puedes loguear el resultado de la consulta si es necesario
-            console.log(result); // Muestra los resultados de la llamada
+            await db.query(queries.callCreatePedido, [id]);
             return {message: "Pedido creado con éxito"}
         } catch (error) {
             throw error;
@@ -75,10 +63,7 @@ export class PedidoModel {
     static async getCancelarPedido(id) {
         const db = await pool.connect()
         try {
-            const query = `UPDATE pedidos set estado = 'Cancelado' where id = $1`
-            const values = [id];
-            await db.query(query, values);
-
+            await db.query(queries.modificarPedidoCancelado, [id]);
             return {message: 'El pedido se cancelo de manera correcta'}
         } catch (error) {
             throw error;
@@ -91,10 +76,7 @@ export class PedidoModel {
     static async getPedidosAdmin(id) {
         const db = await pool.connect()
         try {
-            const query = `update pedidos set estado = 'Enviado' where id = $1`;
-            const values = [id];
-
-            await db.query(query, values);
+            await db.query(queries.modificarPedidoEnviado, [id]);
             return {message: 'El pedido se ha enviado de manera correcta'};
         } catch (error) {
             throw error;
