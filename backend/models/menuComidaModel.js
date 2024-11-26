@@ -57,4 +57,19 @@ export class MenuComidaModel {
             db.release();
         }
     }
+
+    //__METODOS PARA EL TIPO DE COMIDAS_________________________________________________________________________________
+    // obtener el listado
+    static async getTipoComida() {
+        const db = await pool.connect()
+        try {
+            const result = await db.query(queries.consultarTipoComidas);
+            return result.rows;
+        } catch (error) {
+            throw error;
+        } finally {
+            db.release();
+        }
+    }
+
 }

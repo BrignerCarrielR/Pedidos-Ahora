@@ -1,60 +1,108 @@
 <app-inicio>
   <div class="m-1">
     <div class="space-y-3">
-      <p class="opacity-70 text-xl font-semibold">Añadir menú</p>
+      <p class="opacity-70 text-xl font-semibold">{{ isEditMode ? 'Editar' : 'Añadir' }} Menú</p>
       <p class="opacity-70">Añade un nuevo menú</p>
     </div>
-    <div class="flex flex-col">
-      <!--      <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">-->
-      <!--        <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">-->
-      <!--          <div class="overflow-hidden">-->
-      <!--            <table class="min-w-full text-center text-sm  text-surface">-->
-      <!--              <thead class="border-b border-neutral-200 bg-gray200">-->
-      <!--              <tr>-->
-      <!--                <th scope="col" class=" py-4">Cliente</th>-->
-      <!--                <th scope="col" class=" py-4">Fecha Pedido</th>-->
-      <!--                <th scope="col" class=" py-4">Estado</th>-->
-      <!--                <th scope="col" class=" py-4">Total</th>-->
-      <!--                <th scope="col" class=" py-4">Acciones</th>-->
-      <!--              </tr>-->
-      <!--              </thead>-->
-      <!--              <tbody>-->
-      <!--              <tr *ngIf="listaPedidos.length === 0; else PedidosConDatos" class="bg-white border-b border-2">-->
-      <!--                <td colspan="4" class="px-6 py-4 text-xl opacity-70 font-medium">No se han realizado pedidos</td>-->
-      <!--              </tr>-->
-      <!--              <ng-template #PedidosConDatos>-->
-      <!--                <tr *ngFor="let pedidos of listaPedidos" class="bg-white border-b border-2">-->
-      <!--                  <td class="whitespace-nowrap py-4">{{ pedidos.nombreusuario }}</td>-->
-      <!--                  <td class="whitespace-nowrap py-4">{{ pedidos.fecha_pedido }}</td>-->
-      <!--                  <td *ngIf="pedidos.estado == 'Enviado'"-->
-      <!--                      class="whitespace-nowrap py-4 text-green-500">{{ pedidos.estado }}-->
-      <!--                  </td>-->
-      <!--                  <td *ngIf="pedidos.estado == 'Pendiente'"-->
-      <!--                      class="whitespace-nowrap py-4 text-blue-500">{{ pedidos.estado }}-->
-      <!--                  </td>-->
-      <!--                  <td *ngIf="pedidos.estado == 'Cancelado'" class="whitespace-nowrap py-4 text-red-500">Cancelado por el-->
-      <!--                    usuario-->
-      <!--                  </td>-->
-
-      <!--                  <td class="whitespace-nowrap py-4">{{ pedidos.total }}</td>-->
-      <!--                  <td *ngIf="pedidos.estado === 'Pendiente'; else Cancelado" class="whitespace-nowrap py-4">-->
-      <!--                    <button (click)="getConfirmarPedido(pedidos.id)"-->
-      <!--                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">-->
-      <!--                      Entregar-->
-      <!--                    </button>-->
-      <!--                  </td>-->
-      <!--                  <ng-template #Cancelado>-->
-      <!--                    <td class="whitespace-nowrap py-4">-->
-      <!--                      <button class="bg-gray-600 text-white rounded-lg py-2 px-4" disabled>-&#45;&#45;</button>-->
-      <!--                    </td>-->
-      <!--                  </ng-template>-->
-      <!--                </tr>-->
-      <!--              </ng-template>-->
-      <!--              </tbody>-->
-      <!--            </table>-->
-      <!--          </div>-->
-      <!--        </div>-->
-      <!--      </div>-->
-    </div>
+    <form (ngSubmit)="GuardarMenu()">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 opacity-70">
+        <div class="flex flex-col m-1">
+          <label>Nombre</label>
+          <input
+            class="rounded px-1 py-1 border"
+            type="text"
+            placeholder="Nombre Comida"
+            [(ngModel)]="menu.nombre_plato"
+            required
+            name="nombre_plato">
+        </div>
+        <div class="flex flex-col m-1">
+          <label>Descripción</label>
+          <input
+            class="rounded px-1 py-1 border"
+            type="text"
+            placeholder="Ingresa la descripción"
+            [(ngModel)]="menu.descripcion"
+            name="descripcion">
+        </div>
+        <div class="flex flex-col m-1">
+          <label>Precio</label>
+          <input
+            class="rounded px-1 py-1 border"
+            type="number"
+            placeholder="Ingresa precio"
+            [(ngModel)]="menu.precio"
+            name="precio">
+        </div>
+        <div class="flex flex-col m-1">
+          <label>Tipo comida</label>
+          <select class="rounded px-1 py-1 border" [(ngModel)]="menu.tipo_comida_id" name="tipoComida">
+            <option value="0" selected disabled >Seleccione un tipo</option>
+            <option *ngFor="let tc of tipoComida " value="{{tc.id}}">{{tc.tipo_nombre}}</option>
+          </select>
+        </div>
+        <div class="flex flex-col m-1">
+          <label>Imagen</label>
+          <input
+            class="rounded px-1 py-1 border"
+            type="file"
+            (change)="onImageSelected($event)"
+            name="imagen">
+        </div>
+        <div class="flex flex-col items-start" *ngIf="isEditMode">
+          <label for="disponible">Disponible:</label>
+          <input id="disponible" type="checkbox" [(ngModel)]="menu.disponible" name="disponible">
+        </div>
+        <div class="flex flex-col m-1">
+          <label>¿Deseas guardar el menú?</label>
+          <div class="flex space-x-2 text-white font-semibold">
+            <button type="button" class="rounded px-4 py-1 bg-blue-600" (click)="limpiarFormulario()">Limpiar</button>
+            <button type="submit" class="rounded px-4 py-1 bg-green-600">{{ isEditMode ? 'Actualizar' : 'Guardar' }} Menú</button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </app-inicio>
+
+<!--<app-inicio>-->
+<!--  <div class="m-1">-->
+<!--    <div class="space-y-3">-->
+<!--      <p class="opacity-70 text-xl font-semibold">{{ isEditMode ? 'Editar' : 'Añadir' }} Menú</p>-->
+<!--    </div>-->
+<!--    <div class="flex flex-col">-->
+<!--      <form (ngSubmit)="GuardarMenu()">-->
+<!--        <div>-->
+<!--          <label for="nombre_plato">Nombre del plato:</label>-->
+<!--          <input id="nombre_plato" [(ngModel)]="menu.nombre_plato" name="nombre_plato" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label for="descripcion">Descripción:</label>-->
+<!--          <input id="descripcion" [(ngModel)]="menu.descripcion" name="descripcion" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label for="precio">Precio:</label>-->
+<!--          <input id="precio" [(ngModel)]="menu.precio" name="precio" type="number" required>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label for="tipo_comida_id">Tipo de comida:</label>-->
+<!--          <select id="tipo_comida_id" [(ngModel)]="menu.tipo_comida_id" name="tipo_comida_id" required>-->
+<!--            <option *ngFor="let tipo of tipoComida" [value]="tipo.id">{{ tipo.nombre }}</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label >Imagen:</label>-->
+<!--          <input type="file" (change)="onImageSelected($event)">-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Campo de "disponible" solo en modo edición &ndash;&gt;-->
+<!--        <div *ngIf="isEditMode">-->
+<!--          <label for="disponible">Disponible:</label>-->
+<!--          <input id="disponible" type="checkbox" [(ngModel)]="menu.disponible" name="disponible">-->
+<!--        </div>-->
+
+<!--        <button type="submit">{{ isEditMode ? 'Actualizar' : 'Guardar' }} Menú</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</app-inicio>-->

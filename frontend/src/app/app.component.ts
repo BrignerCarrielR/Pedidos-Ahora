@@ -14,11 +14,14 @@ import { Router } from '@angular/router';
 export class AppComponent {
   login: boolean;
   nombreUsuario: any;
-  isDropdownOpen: boolean = false; // To manage the dropdown state
+  isDropdownOpen: boolean = false;
+  es_staff: boolean=false;
+
 
   constructor(private authService: AuthService, private router: Router) {
     this.login = this.authService.isLoggedIn;
     this.nombreUsuario = this.authService.nombreUser;
+    this.es_staff = this.authService.es_staff;
   }
 
   // Toggle the dropdown menu
@@ -34,6 +37,11 @@ export class AppComponent {
 
   // Navegamos a el perfil
   goToProfile() {
-    window.location.href="/mi_perfil";
+    if (this.es_staff===true){
+      window.location.href = '/administrador/inicio';
+    }else{
+      window.location.href="/mi_perfil";
+    }
+
   }
 }

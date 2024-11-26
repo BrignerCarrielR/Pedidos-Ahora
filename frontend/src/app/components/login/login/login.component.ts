@@ -15,8 +15,7 @@ import {Router} from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private authService: AuthService, private apiService: ApiService, private router: Router) {
-  }
+  constructor(private authService: AuthService, private apiService: ApiService) {}
 
   // objeto para enviar al login
   dataLogin = {
@@ -30,12 +29,12 @@ export class LoginComponent {
       .subscribe(
         (response: any) => {
           // Cuando obtienes el token de la respuesta, lo guardas
-          this.authService.loginUser(response.token, response.id, response.nombreUsuario);
+          this.authService.loginUser(response.token, response.id, response.nombreUsuario, response.es_staff);
           console.log('Login exitoso');
-          if (response.nombreUsuario === 'bcarrielr') {
-            window.location.href = '/administrador/inicio'
+          if (response.es_staff === true) {
+            window.location.href = '/administrador/inicio';
           } else {
-            window.location.href = '/'
+            window.location.href = '/';
           }
         },
         error => {

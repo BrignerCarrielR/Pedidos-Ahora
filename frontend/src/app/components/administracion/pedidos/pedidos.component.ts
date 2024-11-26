@@ -14,8 +14,6 @@ import { InicioComponent} from '../inicio/inicio.component';
   styleUrl: './pedidos.component.css'
 })
 export class PedidosComponent implements OnInit {
-  titulo: string = 'Gestionar pedidos';
-  subtitulo: string = 'Visualiza los pedidos resalizados - Envía o Cancela'
   listaPedidos: any[] = [];
 
   constructor(private authService: AuthService, private apiService: ApiService) {
@@ -25,7 +23,7 @@ export class PedidosComponent implements OnInit {
   ngOnInit() {
     console.log('Se cargó de manera correcta')
     this.getListaPedidos()
-    if (this.authService.nombreUser != 'bcarrielr'){
+    if (this.authService.es_staff === false){
       window.location.href= '/';
     }
   }

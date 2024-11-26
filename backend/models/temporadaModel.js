@@ -29,8 +29,8 @@ export class TemporadaModel {
     static async postTemporada(data) {
         const db = await pool.connect()
         try {
-            const {nombre, tarifa, estado} = data
-            const values = [nombre, tarifa, estado];
+            const {nombre, tarifa} = data
+            const values = [nombre, tarifa];
             await db.query(queries.insertarTemporada, values)
             return {message: 'El plato se creó correctamente.'}
         } catch (error) {

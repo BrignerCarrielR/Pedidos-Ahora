@@ -6,7 +6,7 @@
         <p>Te damos la bienvenida a la parte administrativa.</p>
       </div>
       <div class="flex flex-col space-y-3 mt-8">
-        <a id="informacion_actual" class="flex space-x-1"
+        <a id="informacion_actual" class="flex space-x-1 hover:text-red-600"
            [ngClass]="{'text-red-600 font-semibold': isActive('/administrador/pedidos')}" href="/administrador/pedidos">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                stroke="currentColor" class="size-6">
@@ -16,7 +16,7 @@
           <p>Gestionar pedidos</p>
         </a>
 
-        <a id="mis_pedidos" class="flex space-x-1"
+        <a id="mis_pedidos" class="flex space-x-1 hover:text-red-600"
            [ngClass]="{'text-red-600 font-semibold': isActive('/administrador/lista_menus')}"
            href="/administrador/lista_menus">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -27,7 +27,7 @@
           <p>Gestionar menú</p>
         </a>
 
-        <a id="cancelados" class="flex space-x-1"
+        <a id="cancelados" class="flex space-x-1 hover:text-red-600"
            [ngClass]="{'text-red-600 font-semibold': isActive('/administrador/anadir_menu')}"
            href="/administrador/anadir_menu">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

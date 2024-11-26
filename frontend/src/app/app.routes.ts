@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import {Routes} from '@angular/router';
 import {ListaMenuComponent} from './components/menuComidas/lista-menu/lista-menu.component';
 import {RegisterComponent} from './components/login/register/register.component';
 import {LoginComponent} from './components/login/login/login.component';
@@ -30,5 +30,6 @@ export const routes: Routes = [
   {path: 'administrador/inicio', component: InicioComponent},
   {path: 'administrador/lista_menus', component: ListaMenusComponent},
   {path: 'administrador/anadir_menu', component: AnadirMenuComponent},
+  {path: 'administrador/editar_menu/:id', component: AnadirMenuComponent},
   {path: 'administrador/pedidos', component: PedidosComponent},
 ];

@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AuthService } from '../../../auth.service';
-import { ApiService } from '../../../api.service';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {AuthService} from '../../../auth.service';
+import {ApiService} from '../../../api.service';
+import {HttpClientModule} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-lista-menu',
@@ -25,16 +25,18 @@ export class ListaMenuComponent implements OnInit {
     'Comidas Vegetarianas y Veganas',
     'Comidas de Desayuno',
     'Comidas Dulces',
-    'Comidas Saludables',
+    'Comidas Saludabless',
   ];
 
-  constructor(private authService: AuthService, private apiService: ApiService) {}
+  constructor(private authService: AuthService, private apiService: ApiService) {
+    console.log('Es staff?: ',authService.es_staff);
+  }
 
   ngOnInit(): void {
     console.log('Id obtenido desde el servicio:', this.authService.id);
     console.log('Estado del logueo:', this.authService.isLoggedIn);
     this.login = this.authService.isLoggedIn;
-
+    console.log(this.menuItems)
     this.getMenuItems();
   }
 
@@ -44,6 +46,14 @@ export class ListaMenuComponent implements OnInit {
       menu.nombre_plato.toLowerCase().includes(this.buscarComida.toLowerCase())
     );
     console.log('Menú filtrado:', this.MenuItemsFiltrado);
+  }
+  // funcion para truncar la descripcion para que se muestre un maximo de 4 palabras
+  truncateDescription(descripcion: string, limitePalabras: number = 4): string {
+    const palabras = descripcion.split(' ');
+    if (palabras.length > limitePalabras) {
+      return palabras.slice(0, limitePalabras).join(' ') + '...';
+    }
+    return descripcion;
   }
 
   selectedCategory: string = this.categories[0];

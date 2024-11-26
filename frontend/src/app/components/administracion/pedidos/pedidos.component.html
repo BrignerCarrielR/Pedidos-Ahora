@@ -9,7 +9,7 @@
         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div class="overflow-hidden h-96 overflow-y-auto">
             <table class="min-w-full text-center text-sm  text-surface">
-              <thead class="border-b border-neutral-200 bg-gray200">
+              <thead class="border-b border-neutral-200 bg-gray-200">
               <tr>
                 <th scope="col" class=" py-4">Cliente</th>
                 <th scope="col" class=" py-4">Fecha Pedido</th>
@@ -20,11 +20,11 @@
               </thead>
               <tbody>
               <tr *ngIf="listaPedidos.length === 0; else PedidosConDatos" class="bg-white border-b border-2">
-                <td colspan="4" class="px-6 py-4 text-xl opacity-70 font-medium">No se han realizado pedidos</td>
+                <td colspan="5" class="px-6 py-4 text-xl opacity-70 font-medium">No se han realizado pedidos</td>
               </tr>
               <ng-template #PedidosConDatos>
                 <tr *ngFor="let pedidos of listaPedidos" class="bg-white border-b border-2">
-                  <td class="whitespace-nowrap py-4">{{ pedidos.nombreusuario }}</td>
+                  <td class="whitespace-nowrap py-4">{{ pedidos.usuario }}</td>
                   <td class="whitespace-nowrap py-4">{{ pedidos.fecha_pedido }}</td>
                   <td *ngIf="pedidos.estado == 'Enviado'"
                       class="whitespace-nowrap py-4 text-green-500">{{ pedidos.estado }}
@@ -40,7 +40,7 @@
                   <td *ngIf="pedidos.estado === 'Pendiente'; else Cancelado" class="whitespace-nowrap py-4">
                     <button (click)="getConfirmarPedido(pedidos.id)"
                             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                      Entregar
+                      Enviar
                     </button>
                   </td>
                   <ng-template #Cancelado>

@@ -8,4 +8,6 @@ menuComidaRouter.get('/menu_comida/:id', MenuComidaController.getMenuComidaId);
 menuComidaRouter.post('/menu_comida', MenuComidaController.postMenuComida);
 menuComidaRouter.put('/menu_comida/:id', MenuComidaController.putMenuComida);
 
+menuComidaRouter.get('/tipo_comida', MenuComidaController.getTipoComida);
+
 export default menuComidaRouter;

@@ -15,7 +15,7 @@
           </thead>
           <tbody>
           <tr *ngIf="listaPedidos.length === 0; else PedidosConDatos" class="bg-white border-b border-2">
-            <td colspan="4" class="px-6 py-4 text-xl opacity-70 font-medium">No se han realizado pedidos</td>
+            <td colspan="4" class="px-6 py-4 text-xl opacity-70 font-medium">No se han realizado cancelaciones</td>
           </tr>
           <ng-template #PedidosConDatos>
             <tr *ngFor="let pedidos of listaPedidos" class="bg-white border-b border-2">

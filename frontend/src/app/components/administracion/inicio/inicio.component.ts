@@ -17,6 +17,9 @@ export class InicioComponent {
   constructor(private authService: AuthService, private router: Router) {
     this.nombreUsuario = this.authService.nombreUser;
     this.urlactual = this.router.url;
+    if(authService.es_staff===false){
+      window.location.href = '/';
+    }
   }
 
   // Función para determinar si la URL actual corresponde con el enlace

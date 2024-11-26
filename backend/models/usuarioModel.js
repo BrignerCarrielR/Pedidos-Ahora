@@ -34,11 +34,6 @@ export class UsuarioModel {
         const db = await pool.connect()
         try{
             const { nombreUsuario, correo, contrasena, telefono, direccion } = usuario;
-            console.log(nombreUsuario, correo, contrasena, telefono, direccion);
-            if (typeof nombreUsuario !== "string" || nombreUsuario.trim() === "" ) throw new Error("El nombre no es valido");
-            if (contrasena.length < 8 || contrasena.length > 16) throw  new  Error('La debe tener entre 8 y 16 caracteres')
-            if (telefono.length !== 10) throw  new  Error('El telefono debe tener  10 caracteres')
-
             // encriptamos la contraseña
             const hashedContrasena = await bcrypt.hashSync(contrasena, 10);
 
