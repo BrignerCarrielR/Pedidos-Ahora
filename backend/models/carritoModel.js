@@ -22,9 +22,22 @@ export class CarritoModel {
             const {id_usuario, id_comida, cantidad} = pedido
             const values = [id_usuario, id_comida, cantidad]
             await db.query(queries.callAgregarCarrito, values)
-            return {message:'Pedido agregado al carrito'}
+            return {message: 'Pedido agregado al carrito'}
         } catch (error) {
             throw error;
+        } finally {
+            db.release();
+        }
+    }
+
+    // metodo para eliminar un menu del carrito
+    static async deleteMenuPedido(id) {
+        const db = await pool.connect()
+        try {
+            await db.query(queries.eliminarMenuCarrito, [id])
+            return {message: 'Pedido eliminado del carrito'}
+        } catch (error) {
+            throw error
         } finally {
             db.release();
         }

@@ -23,4 +23,16 @@ export class CarritoController {
             })
         }
     }
+
+    // eliminar menu del carrito
+    static async deleteControllerMenuPedido(req, res){
+        try{
+            const data = await CarritoModel.deleteMenuPedido(req.params.id);
+            res.status(200).send(data)
+        } catch (error) {
+            res.status(500).send({
+                message: error.message || "Error al eliminar  el menu del carrito"
+            })
+        }
+    }
 }

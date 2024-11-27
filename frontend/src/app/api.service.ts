@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { AuthService } from './auth.service'; // Asegúrate de importar AuthService
+import {Injectable} from '@angular/core';
+import {Observable, throwError} from 'rxjs';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
+import {AuthService} from './auth.service'; // Asegúrate de importar AuthService
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +10,10 @@ import { AuthService } from './auth.service'; // Asegúrate de importar AuthServ
 export class ApiService {
   private baseUrl: string = 'http://localhost:3000/';  // URL base de todas las APIs
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) {
+  }
 
-  // Método para construir los encabezados con el token de autorización
+  // Metodo para construir los encabezados con el token de autorización
   private getHeaders(): HttpHeaders {
     const token = this.authService.token;  // Obtener el token desde AuthService
     if (token) {
@@ -24,23 +25,28 @@ export class ApiService {
     }
   }
 
-  // Método GET para obtener listas o un solo elemento (id opcional)
+  // Metodo GET para obtener listas o un solo elemento (id opcional)
   get<T>(url: string, id?: number): Observable<T> {
     const endpoint = id ? `${url}/${id}` : url;
-    return this.http.get<T>(`${this.baseUrl}${endpoint}`, { headers: this.getHeaders() });
+    return this.http.get<T>(`${this.baseUrl}${endpoint}`, {headers: this.getHeaders()});
   }
 
-  // Método POST para crear nuevos registros
+  // Metodo POST para crear nuevos registros
   post<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}${endpoint}`, body, { headers: this.getHeaders() })
+    return this.http.post<T>(`${this.baseUrl}${endpoint}`, body, {headers: this.getHeaders()})
       .pipe(
         catchError(this.handleError)
       );
   }
 
-  // Método PUT para actualizar los registros
+  // Metodo PUT para actualizar los registros
   put<T>(endpoint: string, body: any): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}${endpoint}`, body, { headers: this.getHeaders() });
+    return this.http.put<T>(`${this.baseUrl}${endpoint}`, body, {headers: this.getHeaders()});
+  }
+
+  // Metodo DELETE para eliminar registros
+  delete<T>(endpoint: string): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}${endpoint}`, {headers: this.getHeaders()})
   }
 
   // Manejo de errores HTTP

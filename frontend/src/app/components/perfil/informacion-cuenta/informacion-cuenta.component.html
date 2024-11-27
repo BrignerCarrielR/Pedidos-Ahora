@@ -1,26 +1,35 @@
 <app-mi-perfil>
-  <div class="space-y-4 mt-10 sm:mt-0">
-    <p class="opacity-70  text-xl font-semibold">Editar información de la cuenta</p>
-    <p class="opacity-70  py-5 font-semibold">Datos personales</p>
-    <div class=" opacity-70 sm:flex  sm:space-x-2">
-      <div class="w-full flex flex-col m-1">
-        <label for="usuario">Usuario</label>
-        <input id="usuario" type="text" class="py-2 px-4 border-2 rounded bg-gray-100" value="Brigner Carriel">
+  <form (ngSubmit)="EditarUsuaio()">
+    <div class="space-y-4 mt-10 sm:mt-0">
+      <p class="opacity-70  text-xl font-semibold">Editar información de la cuenta</p>
+      <p class="opacity-70  py-5 font-semibold">Datos personales</p>
+      <div class=" opacity-70 sm:flex  sm:space-x-2">
+        <div class="w-full flex flex-col m-1">
+          <label for="usuario">Usuario</label>
+          <input id="usuario"
+                 name="usuario"
+                 type="text"
+                 class="py-2 px-4 border-2 rounded bg-gray-100"
+                 [(ngModel)]="usuario.usuario">
+        </div>
+        <div class="w-full flex flex-col m-1">
+          <label for="direccion">Dirección</label>
+          <input id="direccion"
+                 name="direccion"
+                 type="text"
+                 class="py-2 px-4 border-2 rounded bg-gray-100"
+                 [(ngModel)]="usuario.direccion">
+        </div>
       </div>
-      <div class="w-full flex flex-col m-1">
-        <label for="direccion">Dirección</label>
-        <input id="direccion" type="text" class="py-2 px-4 border-2 rounded bg-gray-100" value="Vinces - Palizada">
+      <div class="opacity-70 ">
+        <p class="font-semibold">Email</p>
+        <p>{{ usuario.correo }}</p>
       </div>
-
+      <div>
+        <button type="submit" class="bg-red-600 rounded py-2 px-6 text-white font-semibold">Guardar cambios</button>
+      </div>
     </div>
-    <div class="opacity-70 ">
-      <p class="font-semibold">Email</p>
-      <p>brignerunemi.edu.ec</p>
-    </div>
-    <div>
-      <button class="bg-red-600 rounded py-2 px-6 text-white font-semibold">Guardar cambios</button>
-    </div>
-  </div>
+  </form>
 </app-mi-perfil>
 
 

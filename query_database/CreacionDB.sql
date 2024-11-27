@@ -123,7 +123,6 @@ END;
 $$;
 
 
-
 CREATE OR REPLACE PROCEDURE confirmar_pedido(p_id_usuario INT)
 LANGUAGE plpgsql
 AS $$
@@ -132,71 +131,75 @@ DECLARE
     v_total DECIMAL(10, 2) := 0;
     v_id_pedido INT;
     v_id_temporada INT;
+    v_tarifa DECIMAL(10, 2);
     detalle RECORD;
 BEGIN
-    -- obtenemos el carrito activo del usuario
+   -- Depuración: Verificar el valor del p_id_usuario
+    RAISE NOTICE 'Usuario ID: %', p_id_usuario;
+
+    -- Obtenemos el carrito activo del usuario
     SELECT id INTO v_id_carrito
     FROM carrito
     WHERE id_usuario = p_id_usuario AND estado = 'Activo';
 
-    -- si no hay carrito activo, lanzar un error
+    -- Si no hay carrito activo, lanzar un error
     IF NOT FOUND THEN
         RAISE EXCEPTION 'No tienes un carrito activo.';
     END IF;
 
-    -- creamos un nuevo pedido
+    -- Creamos un nuevo pedido
     INSERT INTO pedidos(id_usuario, total) 
     VALUES (p_id_usuario, 0) RETURNING id INTO v_id_pedido;
 
-    -- obtenemos el id de la temporada activa (si hay varias, tomamos una)
+    -- Obtenemos el id de la temporada activa (si hay varias, tomamos una)
     SELECT id INTO v_id_temporada
     FROM temporada
     WHERE estado = TRUE
     LIMIT 1;
 
-    -- si no hay temporada activa, asignar NULL al pedido
+    -- Si no hay temporada activa, asignar NULL al pedido
     IF NOT FOUND THEN
         v_id_temporada := NULL;
     END IF;
 
-    -- copiamos los detalles del carrito a los detalles del pedido
+    -- Copiamos los detalles del carrito a los detalles del pedido
     FOR detalle IN
         SELECT id_menu_comida, cantidad, precio, total
         FROM detalle_carrito
         WHERE id_carrito = v_id_carrito
     LOOP
-        -- insertamos cada detalle del carrito en detalle_pedido
+        -- Insertamos cada detalle del carrito en detalle_pedido
         INSERT INTO detalle_pedido(id_pedido, id_menu_comida, cantidad, precio, total)
         VALUES (v_id_pedido, detalle.id_menu_comida, detalle.cantidad, detalle.precio, detalle.total);
 
-        -- sumamos el total del pedido
+        -- Sumamos el total del pedido
         v_total := v_total + detalle.total;
     END LOOP;
 
-    -- si hay una temporada activa, aplicar su tarifa al total
+    -- Si hay una temporada activa, aplicar su tarifa al total
     IF v_id_temporada IS NOT NULL THEN
-        -- obtenemos la tarifa de la temporada activa
-        DECLARE
-            v_tarifa DECIMAL(10, 2);
-        BEGIN
-            SELECT tarifa INTO v_tarifa
-            FROM temporada
-            WHERE id = v_id_temporada;
-            
-            -- aplicar la tarifa al total
-            v_total := v_total + v_tarifa;
-        END;
+        -- Obtenemos la tarifa de la temporada activa
+        SELECT tarifa INTO v_tarifa
+        FROM temporada
+        WHERE id = v_id_temporada;
+
+        -- Aplicar la tarifa al total (ajustando el total con la tarifa)
+        IF v_tarifa IS NOT NULL THEN
+            v_total := v_total * (1 + v_tarifa / 100);
+            -- Si necesitas depurar el valor de v_total, usa RAISE NOTICE
+            RAISE NOTICE 'La tarifa aplicada: %, Total después de aplicar la tarifa: %', v_tarifa, v_total;
+        END IF;
     END IF;
 
-    -- actualizamos el total del pedido con la tarifa aplicada
+    -- Actualizamos el total del pedido con la tarifa aplicada
     UPDATE pedidos 
     SET total = v_total, id_temporada = v_id_temporada
     WHERE id = v_id_pedido;
 
-    -- cambiamos el estado del carrito a 'Confirmado'
+    -- Cambiamos el estado del carrito a 'Confirmado'
     UPDATE carrito SET estado = 'Confirmado' WHERE id = v_id_carrito;
 
-    -- eliminamos los detalles del carrito
+    -- Eliminamos los detalles del carrito
     DELETE FROM detalle_carrito WHERE id_carrito = v_id_carrito;
     
 END;
