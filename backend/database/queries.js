@@ -1,7 +1,7 @@
 export const queries = {
     consultarTipoComidas:'select id, tipo_nombre from tipos_comida tc',
 
-    consultarComidas: 'SELECT * FROM menu_comidas',
+    consultarComidas: 'select * from menu_comidas order by nombre_plato',
     consultarComida: 'SELECT * FROM menu_comidas WHERE id = $1',
     insertarComida: 'insert into menu_comidas (nombre_plato, descripcion, precio, disponible, tipo_comida_id, imagen) values ($1, $2, $3,  TRUE, $4, $5)',
     modificarComida: 'UPDATE menu_comidas SET nombre_plato = $1, descripcion = $2,disponible=$3, precio = $4, tipo_comida_id = $5, imagen = $6 WHERE id = $7;',
@@ -25,10 +25,11 @@ export const queries = {
 
     modificarPedidoEnviado: 'update pedidos set estado = \'Enviado\' where id = $1',
     modificarPedidoCancelado: 'UPDATE pedidos set estado = \'Cancelado\' where id = $1',
+    modificarPedidoCanceladoAdmin: 'UPDATE pedidos set estado = \'Cancelado\', comentario = $1 where id = $2',
 
-    consultarTemporadas: 'select * from temporada',
+    consultarTemporadas: 'select * from temporada order by estado desc ',
     consultarTemporada: 'select * from temporada where id = $1',
-    insertarTemporada: 'insert into temporada (nombre, tarifa) values($1, $2)',
+    insertarTemporada: 'insert into temporada (nombre, tarifa, estado) values($1, $2, $3)',
     modificarTemporada: 'update temporada set nombre = $1, tarifa = $2, estado = $3 where id = $4',
 
     consultarFavoritos: 'select f.id, f.id_usuario, f.id_plato, mc.nombre_plato, mc.descripcion, mc.precio, mc.imagen from favoritos f, usuarios u, menu_comidas mc where f.id_usuario = u.id and f.id_plato = mc.id and u.id = $1',

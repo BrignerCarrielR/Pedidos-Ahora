@@ -18,7 +18,7 @@ export class TemporadaModel {
         const db = await pool.connect()
         try {
             const result = await db.query(queries.consultarTemporada, [id]);
-            return result.rows[0];
+            return result.rows;
         } catch (error) {
             throw error;
         } finally {
@@ -29,10 +29,10 @@ export class TemporadaModel {
     static async postTemporada(data) {
         const db = await pool.connect()
         try {
-            const {nombre, tarifa} = data
-            const values = [nombre, tarifa];
+            const {nombre, tarifa, estado} = data
+            const values = [nombre, tarifa, estado];
             await db.query(queries.insertarTemporada, values)
-            return {message: 'El plato se creó correctamente.'}
+            return {message: 'La temporada se creó correctamente.'}
         } catch (error) {
             throw error;
         } finally {
@@ -46,7 +46,7 @@ export class TemporadaModel {
             const {nombre, tarifa, estado} = data
             const values = [nombre, tarifa, estado, id];
             await db.query(queries.modificarTemporada, values)
-            return {message: 'El plato se creó correctamente.'}
+            return {message: 'La temporada se editó correctamente.'}
         } catch (error) {
             throw error;
         } finally {

@@ -13,6 +13,7 @@ import {InicioComponent} from './components/administracion/inicio/inicio.compone
 import {AnadirMenuComponent} from './components/administracion/anadir-menu/anadir-menu.component';
 import {ListaMenusComponent} from './components/administracion/lista-menus/lista-menus.component';
 import {FavoritosComponent} from './components/perfil/favoritos/favoritos.component';
+import {TemporadasComponent} from './components/administracion/temporadas/temporadas.component';
 
 export const routes: Routes = [
   {path: '', component: ListaMenuComponent},
@@ -32,4 +33,5 @@ export const routes: Routes = [
   {path: 'administrador/anadir_menu', component: AnadirMenuComponent},
   {path: 'administrador/editar_menu/:id', component: AnadirMenuComponent},
   {path: 'administrador/pedidos', component: PedidosComponent},
+  {path: 'administrador/temporadas', component: TemporadasComponent},
 ];

@@ -9,5 +9,6 @@ pedidosRouter.get('/pedidos/detalles/:id', PedidoController.getDetallePedido);
 pedidosRouter.get('/cancelar_pedido/:id', PedidoController.CancelarPedido);
 pedidosRouter.post('/pedidos', PedidoController.createPedido);
 pedidosRouter.get('/confirmar_pedidos/:id', PedidoController.ConfirmarPedido);
+pedidosRouter.put('/cancelar_pedido/:id', PedidoController.CancelarPedidoAdmin);
 
 export default pedidosRouter;

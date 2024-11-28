@@ -84,4 +84,19 @@ export class PedidoModel {
             db.release();
         }
     }
+
+    // metodo para que el administrador pueda cancelar y dejar un comentario
+    static async putPedido(id, pedido) {
+        const db = await pool.connect()
+        try {
+            const {comentario} = pedido
+            const values = [comentario, id]
+            await db.query(queries.modificarPedidoCanceladoAdmin, values);
+            return {message: 'Se canceló y se actualizó correctamente el registro'};
+        } catch (error) {
+            throw error;
+        } finally {
+            db.release();
+        }
+    }
 }

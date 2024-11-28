@@ -61,4 +61,15 @@ export class PedidoController {
             });
         }
     }
+
+    static async CancelarPedidoAdmin(req, res) {
+        try {
+            const data = await  PedidoModel.putPedido(req.params.id, req.body);
+            res.status(200).send(data);
+        } catch (error) {
+            res.status(500).send({
+                message: error.message || "Error al actualizar el pedido"
+            });
+        }
+    }
 }

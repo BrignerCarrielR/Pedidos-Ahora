@@ -16,24 +16,36 @@
       <p class="font-semibold text-xl">Comidas</p>
       <p class="text-sm text-gray-400">{{ MenuItemsFiltrado.length }} resultados</p>
     </div>
-    <div class="mt-2">
-      <p class="font-semibold text-xl">Filtros</p>
+
+    <!-- Filtro de categoría -->
+    <div class="space-y-2">
       <div class="space-y-2">
-        <div class="flex space-x-2" *ngFor="let category of categories; let i = index">
-          <input type="radio" [name]="'category'" [(ngModel)]="selectedCategory" [value]="category" id="category-{{i}}">
-          <label for="category-{{i}}">{{ category }}</label>
-        </div>
         <div class="flex space-x-2">
-          <p class="font-semibold">Ordenar</p>
-          <select class="w-full rounded-lg px-2" [(ngModel)]="selectedOrder">
-            <option value="A-Z">A - Z</option>
-            <option value="Z-A">Z - A</option>
-            <option value="price-desc">Precio: Mayor - Menor</option>
-            <option value="price-asc">Precio: Menor - Mayor</option>
-          </select>
+          <input type="radio" [name]="'category'" [(ngModel)]="categoriaSeleccionada" [value]="null"
+                 (change)="aplicarFiltros()">
+          <label>Mostrar Todo</label>
+        </div>
+
+        <div class="flex space-x-2" *ngFor="let category of tipoPlato; let i = index">
+          <input type="radio" [name]="'category'" [(ngModel)]="categoriaSeleccionada" [value]="category.id"
+                 (change)="aplicarFiltros()">
+          <label for="category-{{i}}">{{ category.tipo_nombre }}</label>
         </div>
       </div>
+
+      <!-- Filtro de orden -->
+      <div class="flex space-x-2">
+        <p class="font-semibold">Ordenar</p>
+        <select class="w-full rounded-lg px-2" [(ngModel)]="ordenSeleccionado" (change)="aplicarFiltros()">
+          <option value="default">Ordenar por defecto</option>
+          <option value="A-Z">A - Z</option>
+          <option value="Z-A">Z - A</option>
+          <option value="price-asc">Precio: Menor - Mayor</option>
+          <option value="price-desc">Precio: Mayor - Menor</option>
+        </select>
+      </div>
     </div>
+
   </div>
 
   <div class="w-full mx-auto overflow-y-auto h-[calc(100vh-130px)]">

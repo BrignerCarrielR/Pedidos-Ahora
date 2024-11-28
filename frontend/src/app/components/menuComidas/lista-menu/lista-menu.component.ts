@@ -18,18 +18,10 @@ export class ListaMenuComponent implements OnInit {
   MenuItemsFiltrado: any[] = [];
   login: boolean = false;
   buscarComida: string = '';
-  categories: string[] = [
-    'Todas',
-    'Comidas tipicas del País',
-    'Comidas Internacionales',
-    'Comidas Vegetarianas y Veganas',
-    'Comidas de Desayuno',
-    'Comidas Dulces',
-    'Comidas Saludabless',
-  ];
+  tipoPlato: any[] = [];
 
   constructor(private authService: AuthService, private apiService: ApiService) {
-    console.log('Es staff?: ',authService.es_staff);
+    console.log('Es staff?: ', authService.es_staff);
   }
 
   ngOnInit(): void {
@@ -38,6 +30,7 @@ export class ListaMenuComponent implements OnInit {
     this.login = this.authService.isLoggedIn;
     console.log(this.menuItems)
     this.getMenuItems();
+    this.getTipoMenuItems()
   }
 
   // evento pra filtrar los elmentos segun lo ingreado
@@ -47,6 +40,7 @@ export class ListaMenuComponent implements OnInit {
     );
     console.log('Menú filtrado:', this.MenuItemsFiltrado);
   }
+
   // funcion para truncar la descripcion para que se muestre un maximo de 4 palabras
   truncateDescription(descripcion: string, limitePalabras: number = 4): string {
     const palabras = descripcion.split(' ');
@@ -56,9 +50,6 @@ export class ListaMenuComponent implements OnInit {
     return descripcion;
   }
 
-  selectedCategory: string = this.categories[0];
-  selectedOrder: string = 'A-Z';
-
   // obtenemos los elementos del menú de la API
   getMenuItems() {
     this.apiService.get<any[]>('menu_comida')
@@ -66,6 +57,19 @@ export class ListaMenuComponent implements OnInit {
         data => {
           this.menuItems = data;
           this.MenuItemsFiltrado = data; // definimos la lista filtrada al iniciar con todos los elementos
+        },
+        error => {
+          console.error(error);
+        }
+      );
+  }
+
+  getTipoMenuItems() {
+    this.apiService.get<any[]>('tipo_comida')
+      .subscribe(
+        data => {
+          this.tipoPlato = data;
+          console.log(this.tipoPlato)
         },
         error => {
           console.error(error);
@@ -94,4 +98,39 @@ export class ListaMenuComponent implements OnInit {
       }
     );
   }
+
+  categoriaSeleccionada: string = this.tipoPlato[0];
+  ordenSeleccionado: string = 'A-Z';
+
+  // Añadir al componente ListaMenuComponent
+  aplicarFiltros() {
+    // filtrar por categoria
+    let elementosFiltrados = this.menuItems;
+
+    if (this.categoriaSeleccionada) {
+      elementosFiltrados = this.menuItems.filter(item => item.tipo_comida_id === this.categoriaSeleccionada);
+    }
+
+    // filtrar por busqueda (buscarComida)
+    if (this.buscarComida) {
+      elementosFiltrados = elementosFiltrados.filter(item =>
+        item.nombre_plato.toLowerCase().includes(this.buscarComida.toLowerCase())
+      );
+    }
+
+    // ordenar por el criterio seleccionado
+    if (this.ordenSeleccionado === 'A-Z') {
+      elementosFiltrados = elementosFiltrados.sort((a, b) => a.nombre_plato.localeCompare(b.nombre_plato));
+    } else if (this.ordenSeleccionado === 'Z-A') {
+      elementosFiltrados = elementosFiltrados.sort((a, b) => b.nombre_plato.localeCompare(a.nombre_plato));
+    } else if (this.ordenSeleccionado === 'precio-asc') {
+      elementosFiltrados = elementosFiltrados.sort((a, b) => a.precio - b.precio);
+    } else if (this.ordenSeleccionado === 'precio-desc') {
+      elementosFiltrados = elementosFiltrados.sort((a, b) => b.precio - a.precio);
+    }
+
+    // actualizamos la lista filtrada y ordenada
+    this.MenuItemsFiltrado = elementosFiltrados;
+  }
+
 }
